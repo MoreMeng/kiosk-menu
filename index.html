@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KIOSK MENU</title>
+  <meta name="description" content="show image menu from kiosk">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+</head>
+
+<body class="bg-dark text-white text-center">
+  <h1 class="pt-2 text-center">KIOSK MENU 3 Column</h1>
+
+  <div id="loading" class="spinner-grow mt-5" style="width: 3rem; height: 3rem" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <div id="kiosk" class="row px-4"></div>
+  <script>
+    const requestURL = 'http://129.0.0.8:6601/kiosk-menu';
+    const kiosk = document.getElementById("kiosk");
+    let img = "";
+    try {
+      fetch(requestURL)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+          data.forEach((item) => {
+            img += `<div class="col-4 p-2"><img src="data:image/png;base64, ${item.button_image}" class="img-fluid" alt="${item.description}"></div>`;
+          });
+          kiosk.innerHTML = img;
+          document.getElementById("loading").classList.add("d-none");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          kiosk.innerHTML = `<div class="alert alert-danger" role="alert">Fetch Error: ${error}</div>`;
+          document.getElementById("loading").classList.add("d-none");
+        });
+    } catch (error) {
+      console.error("Error:", error);
+      kiosk.innerHTML = `<div class="alert alert-danger" role="alert">Script Error: ${error}</div>`;
+      document.getElementById("loading").classList.add("d-none");
+    }
+  </script>
+</body>
+
+</html>
