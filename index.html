@@ -14,8 +14,8 @@
 <body class="bg-dark text-white text-center">
   <h1 class="pt-2 text-center">KIOSK MENU</h1>
   <div class="container">
-    <button value="0" type="button" class="btn btn-outline-light btn-lg" onclick="showMenu(this)">KIOSK</button>
-    <button value="1" type="button" class="btn btn-outline-light btn-lg" onclick="showMenu(this)">MINI KIOSK</button>
+    <button value="0" type="button" class="btn btn-outline-light btn-lg btn-kiosk" onclick="showMenu(this)">KIOSK</button>
+    <button value="1" type="button" class="btn btn-outline-light btn-lg btn-kiosk" onclick="showMenu(this)">MINI KIOSK</button>
   </div>
 
   <div id="loading" class="spinner-grow mt-5" style="width: 3rem; height: 3rem" role="status">
@@ -24,7 +24,7 @@
 
   <div id="kiosk" class="row px-4"></div>
   <script>
-    const requestURL = 'http://127.0.0.1:6601/kiosk-menu';
+    const requestURL = 'api/kiosk';
     const kiosk = document.getElementById("kiosk");
 
     function showMenu(button) {
@@ -56,6 +56,13 @@
         kiosk.innerHTML = `<div class="alert alert-danger" role="alert">Script Error: ${error}</div>`;
         document.getElementById("loading").classList.add("d-none");
       }
+
+      // Remove 'active' class from all buttons
+      const buttons = document.querySelectorAll('.btn-kiosk');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Add 'active' class to the clicked button
+      button.classList.add('active');
     }
   </script>
 </body>
