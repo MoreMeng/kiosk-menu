@@ -61,19 +61,16 @@
             data.forEach((item, index) => {
               img += `
                 <div class="${col} p-2" draggable="true" data-original-order="${item.order_no}" data-current-order="${index + 1}" data-id="${item.opd_kios_dep_menu_id}">
-                  <div class="card bg-dark text-white border-secondary h-100 rounded-5 draggable-card">
-                    <img src="data:image/png;base64, ${item.button_image}" class="card-img-top img-fluid" alt="${item.description}">
-                    <div class="card-body p-2 d-flex align-items-center">
+                  <div class="card bg-transparent h-100 draggable-card">
+                    <img src="data:image/png;base64, ${item.button_image}" class="card-img" alt="${item.description}">
+                    <div class="card-img-overlay p-2 d-flex align-items-center">
                       <div class="row align-items-center justify-content-center w-100">
-                        <div class="col-3 text-center">
+                        <div class="col-3 text-center d-flex align-items-center justify-content-center">
                           <span class="badge order-badge bg-primary fs-3" data-original="${item.order_no}">${index + 1}</span>
                         </div>
-                        <div class="col-9">
-                          <div class="d-flex mb-1">
+                        <div class="col-9 bg-light d-flex align-items-center">
+                          <div class="d-flex mb-1 w-100">
                             <h6 class="card-title mb-0 flex-grow-1"><span class="badge bg-secondary me-2">${item.depcode}</span> ${item.description}</h6>
-                          </div>
-                          <div class="text-center">
-                            <small class="text-secondary">${item.computer_name}</small>
                           </div>
                         </div>
                       </div>
