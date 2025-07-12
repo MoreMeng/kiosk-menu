@@ -8,6 +8,7 @@
   <title>KIOSK MENU</title>
   <meta name="description" content="show image menu from kiosk">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     [draggable="true"] {
       cursor: move;
@@ -34,6 +35,9 @@
   <div class="container">
     <button value="0" type="button" class="btn btn-outline-light btn-lg btn-kiosk" onclick="showMenu(this)">KIOSK</button>
     <button value="1" type="button" class="btn btn-outline-light btn-lg btn-kiosk" onclick="showMenu(this)">MINI KIOSK</button>
+    <button type="button" class="btn btn-outline-warning btn-lg ms-3" onclick="toggleOverlay()" id="toggleBtn">
+      <i class="bi bi-eye-slash"></i> ซ่อนข้อมูล
+    </button>
   </div>
 
   <div id="loading" class="spinner-grow mt-5" style="width: 3rem; height: 3rem" role="status">
@@ -44,6 +48,7 @@
   <script>
     const requestURL = 'api/kiosk';
     const kiosk = document.getElementById("kiosk");
+    let isOverlayHidden = false; // เก็บสถานะการซ่อน overlay
 
     function showMenu(button) {
 
@@ -59,11 +64,12 @@
             // console.log(data);
 
             data.forEach((item, index) => {
+              const overlayDisplay = isOverlayHidden ? 'style="display: none;"' : '';
               img += `
                 <div class="${col} p-2" draggable="true" data-original-order="${item.order_no}" data-current-order="${index + 1}" data-id="${item.opd_kios_dep_menu_id}">
                   <div class="card bg-transparent h-100 draggable-card">
                     <img src="data:image/png;base64, ${item.button_image}" class="card-img" alt="${item.description}">
-                    <div class="card-img-overlay p-2 d-flex align-items-center">
+                    <div class="card-img-overlay p-2 d-flex align-items-center" ${overlayDisplay}>
                       <div class="row align-items-center justify-content-center w-100">
                         <div class="col-3 text-center d-flex align-items-center justify-content-center">
                           <span class="badge order-badge bg-primary fs-3" data-original="${item.order_no}">${index + 1}</span>
@@ -162,6 +168,39 @@
           orderBadge.className = 'badge order-badge bg-primary fs-3 p-3'; // Original blue background
         }
       });
+    }
+
+    function toggleOverlay() {
+      const overlays = document.querySelectorAll('.card-img-overlay');
+      const toggleBtn = document.getElementById('toggleBtn');
+
+      console.log('Toggle clicked, overlays found:', overlays.length); // Debug
+
+      isOverlayHidden = !isOverlayHidden; // สลับสถานะ
+
+      console.log('isOverlayHidden:', isOverlayHidden); // Debug
+
+      overlays.forEach((overlay, index) => {
+        console.log(`Overlay ${index}:`, overlay); // Debug
+        if (isOverlayHidden) {
+          overlay.style.display = 'none';
+          overlay.style.visibility = 'hidden';
+          console.log(`Hidden overlay ${index}`); // Debug
+        } else {
+          overlay.style.display = 'flex';
+          overlay.style.visibility = 'visible';
+          console.log(`Shown overlay ${index}`); // Debug
+        }
+      });
+
+      // อัปเดตปุ่ม
+      if (isOverlayHidden) {
+        toggleBtn.innerHTML = '<i class="bi bi-eye"></i> แสดงข้อมูล';
+        toggleBtn.className = 'btn btn-outline-success btn-lg ms-3';
+      } else {
+        toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i> ซ่อนข้อมูล';
+        toggleBtn.className = 'btn btn-outline-warning btn-lg ms-3';
+      }
     }
   </script>
 </body>
