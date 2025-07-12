@@ -8,6 +8,24 @@
   <title>KIOSK MENU</title>
   <meta name="description" content="show image menu from kiosk">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <style>
+    [draggable="true"] {
+      cursor: move;
+      transition: all 0.3s ease;
+    }
+
+    [draggable="true"]:hover {
+      transform: scale(1.02);
+    }
+
+    .order-badge {
+      transition: background-color 0.3s ease;
+    }
+
+    .draggable-card {
+      transition: all 0.3s ease;
+    }
+  </style>
 
 </head>
 
@@ -40,11 +58,34 @@
           .then((data) => {
             // console.log(data);
 
-            data.forEach((item) => {
-              img += `<div class="${col} p-2"><img src="data:image/png;base64, ${item.button_image}" class="img-fluid" alt="${item.description}"></div>`;
+            data.forEach((item, index) => {
+              img += `
+                <div class="${col} p-2" draggable="true" data-original-order="${item.order_no}" data-current-order="${index + 1}" data-id="${item.opd_kios_dep_menu_id}">
+                  <div class="card bg-dark text-white border-secondary h-100 rounded-5 draggable-card">
+                    <img src="data:image/png;base64, ${item.button_image}" class="card-img-top img-fluid" alt="${item.description}">
+                    <div class="card-body p-2 d-flex align-items-center">
+                      <div class="row align-items-center justify-content-center w-100">
+                        <div class="col-3 text-center">
+                          <span class="badge order-badge bg-primary fs-3" data-original="${item.order_no}">${index + 1}</span>
+                        </div>
+                        <div class="col-9">
+                          <div class="d-flex mb-1">
+                            <h6 class="card-title mb-0 flex-grow-1"><span class="badge bg-secondary me-2">${item.depcode}</span> ${item.description}</h6>
+                          </div>
+                          <div class="text-center">
+                            <small class="text-secondary">${item.computer_name}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
             });
             kiosk.innerHTML = img;
             document.getElementById("loading").classList.add("d-none");
+
+            // Initialize drag and drop functionality
+            initializeDragAndDrop();
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -63,6 +104,67 @@
 
       // Add 'active' class to the clicked button
       button.classList.add('active');
+    }
+
+    function initializeDragAndDrop() {
+      const draggableItems = document.querySelectorAll('[draggable="true"]');
+      let draggedElement = null;
+
+      draggableItems.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          draggedElement = item;
+          item.style.opacity = '0.5';
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        item.addEventListener('dragend', (e) => {
+          item.style.opacity = '1';
+          draggedElement = null;
+        });
+
+        item.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+        });
+
+        item.addEventListener('drop', (e) => {
+          e.preventDefault();
+          if (draggedElement && draggedElement !== item) {
+            const parent = item.parentNode;
+            const draggedIndex = Array.from(parent.children).indexOf(draggedElement);
+            const targetIndex = Array.from(parent.children).indexOf(item);
+
+            if (draggedIndex < targetIndex) {
+              parent.insertBefore(draggedElement, item.nextSibling);
+            } else {
+              parent.insertBefore(draggedElement, item);
+            }
+
+            // Update order numbers
+            updateOrderNumbers();
+          }
+        });
+      });
+    }
+
+    function updateOrderNumbers() {
+      const items = document.querySelectorAll('[draggable="true"]');
+      items.forEach((item, index) => {
+        const orderBadge = item.querySelector('.order-badge');
+        const originalOrder = parseInt(orderBadge.getAttribute('data-original'));
+        const newOrder = index + 1;
+
+        // Update the displayed order number
+        orderBadge.textContent = newOrder;
+        item.setAttribute('data-current-order', newOrder);
+
+        // Change badge color if order has changed
+        if (originalOrder !== newOrder) {
+          orderBadge.className = 'badge order-badge bg-danger fs-3 p-3'; // Red background
+        } else {
+          orderBadge.className = 'badge order-badge bg-primary fs-3 p-3'; // Original blue background
+        }
+      });
     }
   </script>
 </body>
