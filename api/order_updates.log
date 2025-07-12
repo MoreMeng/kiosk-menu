@@ -1,0 +1,80 @@
+{
+    "timestamp": "2025-07-12 11:50:43",
+    "updates": [
+        {
+            "opd_kios_dep_menu_id": "89",
+            "order_no": 1
+        },
+        {
+            "opd_kios_dep_menu_id": "90",
+            "order_no": 2
+        },
+        {
+            "opd_kios_dep_menu_id": "81",
+            "order_no": 4
+        },
+        {
+            "opd_kios_dep_menu_id": "119",
+            "order_no": 5
+        }
+    ],
+    "sql_queries": [
+        "UPDATE opd_kios_dep_menu \nSET order_no = new_values.new_order\nFROM (VALUES \n    (89, 1),\n    (90, 2),\n    (81, 4),\n    (119, 5)\n) AS new_values(id, new_order)\nWHERE opd_kios_dep_menu.opd_kios_dep_menu_id = new_values.id;"
+    ]
+}
+{
+    "timestamp": "2025-07-12 11:51:28",
+    "updates": [
+        {
+            "opd_kios_dep_menu_id": "87",
+            "order_no": 1
+        },
+        {
+            "opd_kios_dep_menu_id": "81",
+            "order_no": 2
+        },
+        {
+            "opd_kios_dep_menu_id": "92",
+            "order_no": 3
+        },
+        {
+            "opd_kios_dep_menu_id": "84",
+            "order_no": 4
+        },
+        {
+            "opd_kios_dep_menu_id": "90",
+            "order_no": 5
+        },
+        {
+            "opd_kios_dep_menu_id": "91",
+            "order_no": 6
+        },
+        {
+            "opd_kios_dep_menu_id": "77",
+            "order_no": 7
+        },
+        {
+            "opd_kios_dep_menu_id": "89",
+            "order_no": 8
+        },
+        {
+            "opd_kios_dep_menu_id": "95",
+            "order_no": 9
+        },
+        {
+            "opd_kios_dep_menu_id": "78",
+            "order_no": 10
+        },
+        {
+            "opd_kios_dep_menu_id": "116",
+            "order_no": 11
+        },
+        {
+            "opd_kios_dep_menu_id": "119",
+            "order_no": 12
+        }
+    ],
+    "sql_queries": [
+        "UPDATE opd_kios_dep_menu \nSET order_no = new_values.new_order\nFROM (VALUES \n    (87, 1),\n    (81, 2),\n    (92, 3),\n    (84, 4),\n    (90, 5),\n    (91, 6),\n    (77, 7),\n    (89, 8),\n    (95, 9),\n    (78, 10),\n    (116, 11),\n    (119, 12)\n) AS new_values(id, new_order)\nWHERE opd_kios_dep_menu.opd_kios_dep_menu_id = new_values.id;"
+    ]
+}

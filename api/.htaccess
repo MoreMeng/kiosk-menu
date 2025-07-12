@@ -37,6 +37,6 @@
   # Handle Front Controller...
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^([a-z-]+)/?$  index.php?dev=$1 [QSA]
-  RewriteRule ^([a-z-]+)/([0-9]+)/?$  index.php?dev=$1&id=$2 [QSA]
+  RewriteRule ^([a-z\-]+)/?$  index.php?dev=$1 [QSA,L]
+  RewriteRule ^([a-z\-]+)/([0-9]+)/?$  index.php?dev=$1&id=$2 [QSA,L]
 </IfModule>
